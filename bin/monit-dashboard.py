@@ -75,7 +75,7 @@ def getMonit():
 
             output.append(server)
     print(datetime.datetime.now())
-    return(output)
+    return output
 
 # Classes
 
