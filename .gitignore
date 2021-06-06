@@ -2,3 +2,5 @@
 .*.swp
 conf/servers.json
 *.xlsx
+bin/web
+webpy-*
