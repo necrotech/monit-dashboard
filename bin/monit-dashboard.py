@@ -50,30 +50,33 @@ def getMonit():
         cf = json.loads(f.read())
 
         for site in cf:
-            s = cf[site]
-            r = requests.get(s['url'] + xmlQuery,
-                             auth=(s['user'], s['passwd']))
+            try:
+                s = cf[site]
+                r = requests.get(s['url'] + xmlQuery,
+                                 auth=(s['user'], s['passwd']))
 
-            allstat = json.loads(json.dumps(xmltodict.parse(r.text)['monit']))
+                allstat = json.loads(json.dumps(xmltodict.parse(r.text)['monit']))
 
-            services = allstat['service']
-            status = {}
-            server = {}
-            checks = OrderedDict()
+                services = allstat['service']
+                status = {}
+                server = {}
+                checks = OrderedDict()
 
-            for service in services:
-                name = service['name']
-                status[name] = int(service['status'])
-                checks[name] = status[name]
+                for service in services:
+                    name = service['name']
+                    status[name] = int(service['status'])
+                    checks[name] = status[name]
 
-            sorted_checks = OrderedDict()
-            sorted_checks = OrderedDict(sorted(checks.items(),
-                                               key=itemgetter(1), reverse=True))
-            count = calculate_count(sorted_checks)
-            server = dict(name=site, url=s['url'],
-                          result=sorted_checks, s_rate=count)
+                sorted_checks = OrderedDict()
+                sorted_checks = OrderedDict(sorted(checks.items(),
+                                                   key=itemgetter(1), reverse=True))
+                count = calculate_count(sorted_checks)
+                server = dict(name=site, url=s['url'],
+                              result=sorted_checks, s_rate=count)
 
-            output.append(server)
+                output.append(server)
+            except:
+                print("Error contacting " + site)
     print(datetime.datetime.now())
     return output
 
