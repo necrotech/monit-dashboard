@@ -75,8 +75,10 @@ def getMonit():
                               result=sorted_checks, s_rate=count)
 
                 output.append(server)
-            except:
-                print("Error contacting " + site)
+
+            except Exception as e:
+                print("Error contacting " + site + ": " + str(e))
+
     print(datetime.datetime.now())
     return output
 
